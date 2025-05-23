@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation'
   
-  function goToForecast(){
+  function startForecast(){
     goto('/forecast')
   }
 </script>
@@ -16,7 +16,7 @@
   </p>
 
   <button
-    onclick={goToForecast}
+    onclick={startForecast}
     class="bg-indigo-600 hover:bg-indigo-700 transition-colors text-white text-lg font-medium px-6 py-3 rounded-lg"
   >
     Get Started
