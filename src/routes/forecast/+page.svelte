@@ -8,6 +8,24 @@
 	let revenuePerUser = $state(99);
 	let costPerUser = $state(15);
 	let fixedOverhead = $state(5000);
+	
+	$effect(() => {
+      if (months < 12) months = 12;
+      if (months > 36) months = 36;
+    
+      if (startingUsers < 10) startingUsers = 10;
+    
+      if (growthRate < 0) growthRate = 0;
+    
+      if (churnRate < 0) churnRate = 0;
+      if (churnRate > 100) churnRate = 100;
+    
+      if (revenuePerUser < 1) revenuePerUser = 1;
+    
+      if (costPerUser < 0) costPerUser = 0;
+    
+      if (fixedOverhead < 0) fixedOverhead = 0;
+    });
 </script>
 
 <!-- Filters Sidebar -->
@@ -44,7 +62,7 @@
 					<input
 						type="number"
 						bind:value={growthRate}
-						step="0.1"
+						step="1"
 						min="0"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 					/>
@@ -55,7 +73,7 @@
 					<input
 						type="number"
 						bind:value={churnRate}
-						step="0.1"
+						step="1"
 						min="0"
 						max="100"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
@@ -71,7 +89,7 @@
 						type="number"
 						bind:value={revenuePerUser}
 						min="1"
-						step="0.01"
+						step="1"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 					/>
 				</label>
@@ -82,7 +100,7 @@
 						type="number"
 						bind:value={costPerUser}
 						min="0"
-						step="0.01"
+						step="1"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 					/>
 				</label>
@@ -93,7 +111,7 @@
 						type="number"
 						bind:value={fixedOverhead}
 						min="0"
-						step="0.01"
+						step="1"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 					/>
 				</label>
