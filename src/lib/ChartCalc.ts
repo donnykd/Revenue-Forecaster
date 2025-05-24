@@ -1,13 +1,15 @@
-//Emulation of the calculations done in generateChartData method inside my chart.svelte file
+//Emulation of the calculations done in generateData method inside my chart.svelte file
 
-export function generateChartData({
+export function generateData({
   months,
   startingUsers,
   growthRate,
   churnRate,
   revenuePerUser,
   costPerUser,
-  fixedOverhead
+  fixedOverhead,
+  revenueIncrease, 
+  growthDrop
 }: {
   months: number;
   startingUsers: number;
@@ -16,6 +18,8 @@ export function generateChartData({
   revenuePerUser: number;
   costPerUser: number;
   fixedOverhead: number;
+  revenueIncrease: boolean
+  growthDrop: boolean
 }) {
   let users = startingUsers;
   const labels: string[] = [];
@@ -25,18 +29,34 @@ export function generateChartData({
   const profitData: number[] = [];
 
   for (let i = 1; i <= months; i++) {
-    const revenue = users * revenuePerUser;
+    let effectiveRevenuePerUser = revenuePerUser;
+    let effectiveGrowthRate = growthRate;
+    
+    if(revenueIncrease){
+      effectiveRevenuePerUser *= 1.10;
+    }
+    if (growthDrop) {
+      effectiveGrowthRate *= 0.5;
+    }
+    
+    const revenue = users * effectiveRevenuePerUser;
     const cost = users * costPerUser + fixedOverhead;
     const profit = revenue - cost;
-
+    
     labels.push(`Month ${i}`);
     usersData.push(Math.round(users));
-    mrrData.push(Math.round(revenue));
+    mrrData.push(Math.round(users * effectiveRevenuePerUser));
     costData.push(Math.round(cost));
     profitData.push(Math.round(profit));
-
-    users = users * (1 + growthRate / 100) * (1 - churnRate / 100);
+    
+    users = users * (1 + effectiveGrowthRate / 100) * (1 - churnRate / 100);
   }
 
-  return { labels, usersData, mrrData, costData, profitData };
+  return { labels, usersData, mrrData, costData, profitData,
+    totals: {
+      revenue: Math.round(mrrData.reduce((a, b) => a + b, 0)),
+      cost: Math.round(costData.reduce((a, b) => a + b, 0)),
+      profit: Math.round(profitData.reduce((a, b) => a + b, 0))
+    }
+  };
 }

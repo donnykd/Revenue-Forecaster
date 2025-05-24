@@ -1,5 +1,6 @@
 <script lang="ts">
     import Chart from '$lib/Chart.svelte'
+    import { generateData } from '$lib/ChartCalc';
 
 	let months = $state(12);
 	let startingUsers = $state(100);
@@ -9,8 +10,8 @@
 	let costPerUser = $state(20);
 	let fixedOverhead = $state(1500);
 	
-	let revenueBoostAfter6 = $state(false);
-	let dropGrowthAfter12 = $state(false);
+	let revenueIncrease = $state(false);
+	let growthDrop = $state(false);
 
 	$effect(() => {
       if (months < 12) months = 12;
@@ -125,12 +126,12 @@
 		<div class="flex flex-wrap gap-4 rounded-xl bg-white p-4 shadow-md">
 		
 		<label class="flex items-center gap-2">
-            <input type="checkbox" bind:checked={revenueBoostAfter6} />
+            <input type="checkbox" bind:checked={revenueIncrease} />
             <span>10% increase in revenue per user</span>
         </label>
         
         <label class="flex items-center gap-2">
-          <input type="checkbox" bind:checked={dropGrowthAfter12} />
+          <input type="checkbox" bind:checked={growthDrop} />
           <span>50% drop in growth</span>
         </label>
         
@@ -140,15 +141,52 @@
 		<div class="flex min-h-0 flex-1 flex-row gap-4">
 			<div class="flex min-h-0 flex-1 flex-col gap-4">
 				<div class="flex-1 rounded-xl bg-white p-4 shadow-md">
-					<Chart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead} {revenueBoostAfter6} {dropGrowthAfter12}/>
+					<Chart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead} {revenueIncrease} {growthDrop}/>
 				</div>
 
 			</div>
 
 			<div class="w-[35%] overflow-x-auto rounded-xl bg-white p-4 shadow-md">
-				<table class="w-full">
-					<!-- table -->
-				</table>
+			<table class="w-full text-sm text-gray-700">
+                <thead>
+                    <tr class="border-b">
+                    <th class="text-left py-2">Month</th>
+                    <th class="text-right py-2">Users</th>
+                    <th class="text-right py-2">Revenue (£)</th>
+                    <th class="text-right py-2">Cost (£)</th>
+                    <th class="text-right py-2">Profit (£)</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    {#each generateData({
+                        months,
+                        startingUsers,
+                        growthRate,
+                        churnRate,
+                        revenuePerUser,
+                        costPerUser,
+                        fixedOverhead,
+                        revenueIncrease,
+                        growthDrop
+                    }).labels as label, i}
+                        <tr class="border-b">
+                        <td class="py-1">{label}</td>
+                        <td class="py-1 text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).usersData[i]}</td>
+                        <td class="py-1 text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).mrrData[i]}</td>
+                        <td class="py-1 text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).costData[i]}</td>
+                        <td class="py-1 text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).profitData[i]}</td>
+                        </tr>
+                    {/each}
+                    <tr class="font-bold border-t">
+                        <td class="py-2">Total</td>
+                        <td></td>
+                        <td class="text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).totals.revenue}</td>
+                        <td class="text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).totals.cost}</td>
+                        <td class="text-right">{generateData({ months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueIncrease, growthDrop }).totals.profit}</td>
+                    </tr>
+                </tbody>
+			</table>
 			</div>
 		</div>
 	</div>
