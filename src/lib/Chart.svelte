@@ -2,22 +2,16 @@
   import Chart from 'chart.js/auto';
   import { onMount } from 'svelte';
 
-  const {
-    months,
-    startingUsers,
-    growthRate,
-    churnRate,
-    revenuePerUser,
-    costPerUser,
-    fixedOverhead
-  } = $props();
-
+  const { months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead } = $props();
+  
   let canvasEl: HTMLCanvasElement;
   let chartInstance: Chart;
 
-  function generateFinanceData() {
+  function generateChartData() {
     let users = startingUsers;
     const labels = [];
+    const usersData = [];
+    const mrrData = [];
     const costData = [];
     const profitData = [];
 
@@ -25,34 +19,38 @@
       const revenue = users * revenuePerUser;
       const cost = users * costPerUser + fixedOverhead;
       const profit = revenue - cost;
-
+      
       labels.push(`Month ${i}`);
+      usersData.push(Math.round(users));
+      mrrData.push(Math.round(users * revenuePerUser));
       costData.push(Math.round(cost));
       profitData.push(Math.round(profit));
-
+      
       users = users * (1 + growthRate / 100) * (1 - churnRate / 100);
     }
 
-    return { labels, costData, profitData };
+    return { labels, usersData, mrrData, costData, profitData };
   }
 
   function updateChart() {
-    const { labels, costData, profitData } = generateFinanceData();
+    const { labels, usersData, mrrData, costData, profitData } = generateChartData();
 
     if (chartInstance) {
       chartInstance.data.labels = labels;
-      chartInstance.data.datasets[0].data = costData;
-      chartInstance.data.datasets[1].data = profitData;
+      chartInstance.data.datasets[0].data = usersData;
+      chartInstance.data.datasets[1].data = mrrData;
+      chartInstance.data.datasets[2].data = costData;
+      chartInstance.data.datasets[3].data = profitData;
       chartInstance.update();
     }
   }
-
+  
   $effect(() => {
     updateChart();
   });
 
   onMount(() => {
-    const { labels, costData, profitData } = generateFinanceData();
+    const { labels, usersData, mrrData, costData, profitData } = generateChartData();
 
     chartInstance = new Chart(canvasEl, {
       type: 'line',
@@ -60,17 +58,29 @@
         labels,
         datasets: [
           {
-            label: 'Total Costs (£)',
+            label: 'Users',
+            data: usersData,
+            borderColor: 'rgb(59, 130, 246)',
+            fill: false
+          },
+          {
+            label: 'Monthly Revenue (£)',
+            data: mrrData,
+            borderColor: 'rgb(34, 197, 94)',
+            fill: false
+          },
+          {
+            label: 'Total Cost (£)',
             data: costData,
-            borderColor: 'rgb(251, 191, 36)', // Tailwind yellow-400
+            borderColor: 'rgb(251, 191, 36)',
             fill: false
           },
           {
             label: 'Profit (£)',
             data: profitData,
-            borderColor: 'rgb(34, 197, 94)', // Tailwind green-500
+            borderColor: 'rgb(168, 85, 247)',
             fill: false
-          }
+          },
         ]
       },
       options: {

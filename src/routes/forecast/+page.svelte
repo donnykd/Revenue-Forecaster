@@ -1,13 +1,12 @@
 <script lang="ts">
-	import UserChart from '$lib/components/UserChart.svelte';
-	import FinanceChart from '$lib/components/FinanceChart.svelte';
+    import Chart from '$lib/Chart.svelte'
 
 	let months = $state(12);
-	let startingUsers = $state(10);
-	let growthRate = $state(5);
-	let churnRate = $state(2);
-	let revenuePerUser = $state(50);
-	let costPerUser = $state(20);
+	let startingUsers = $state(100);
+	let growthRate = $state(8);
+	let churnRate = $state(3);
+	let revenuePerUser = $state(99);
+	let costPerUser = $state(15);
 	let fixedOverhead = $state(5000);
 </script>
 
@@ -24,7 +23,7 @@
 					bind:value={months}
 					min="12"
 					max="36"
-					class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-50"
+					class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 				/>
 			</label>
 
@@ -110,12 +109,10 @@
 
 		<div class="flex min-h-0 flex-1 flex-row gap-4">
 			<div class="flex min-h-0 flex-1 flex-col gap-4">
-				<div class="h-1/2 rounded-xl bg-white p-4 shadow-md">
-					<UserChart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} />
+				<div class="flex-1 rounded-xl bg-white p-4 shadow-md">
+					<Chart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead} />
 				</div>
-				<div class="h-1/2 rounded-xl bg-white p-4 shadow-md">
-				    <FinanceChart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead}  />
-				</div>
+
 			</div>
 
 			<div class="w-[35%] overflow-x-auto rounded-xl bg-white p-4 shadow-md">
