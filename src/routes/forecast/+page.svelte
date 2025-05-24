@@ -1,5 +1,6 @@
 <script lang="ts">
 	import UserChart from '$lib/components/UserChart.svelte';
+	import FinanceChart from '$lib/components/FinanceChart.svelte';
 
 	let months = $state(12);
 	let startingUsers = $state(10);
@@ -112,7 +113,9 @@
 				<div class="h-1/2 rounded-xl bg-white p-4 shadow-md">
 					<UserChart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} />
 				</div>
-				<div class="h-1/2 rounded-xl bg-white p-4 shadow-md">Chart 2 (Costs & Profit)</div>
+				<div class="h-1/2 rounded-xl bg-white p-4 shadow-md">
+				    <FinanceChart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead}  />
+				</div>
 			</div>
 
 			<div class="w-[35%] overflow-x-auto rounded-xl bg-white p-4 shadow-md">
