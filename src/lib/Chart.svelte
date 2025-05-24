@@ -2,7 +2,7 @@
   import Chart from 'chart.js/auto';
   import { onMount } from 'svelte';
 
-  const { months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead } = $props();
+  const { months, startingUsers, growthRate, churnRate, revenuePerUser, costPerUser, fixedOverhead, revenueBoostAfter6, dropGrowthAfter12} = $props();
   
   let canvasEl: HTMLCanvasElement;
   let chartInstance: Chart;
@@ -16,17 +16,27 @@
     const profitData = [];
 
     for (let i = 1; i <= months; i++) {
-      const revenue = users * revenuePerUser;
+      let effectiveRevenuePerUser = revenuePerUser;
+      let effectiveGrowthRate = growthRate;
+      
+      if(revenueBoostAfter6){
+        effectiveRevenuePerUser *= 1.10;
+      }
+      if (dropGrowthAfter12) {
+        effectiveGrowthRate *= 0.5;
+      }
+      
+      const revenue = users * effectiveRevenuePerUser;
       const cost = users * costPerUser + fixedOverhead;
       const profit = revenue - cost;
       
       labels.push(`Month ${i}`);
       usersData.push(Math.round(users));
-      mrrData.push(Math.round(users * revenuePerUser));
+      mrrData.push(Math.round(users * effectiveRevenuePerUser));
       costData.push(Math.round(cost));
       profitData.push(Math.round(profit));
       
-      users = users * (1 + growthRate / 100) * (1 - churnRate / 100);
+      users = users * (1 + effectiveGrowthRate / 100) * (1 - churnRate / 100);
     }
 
     return { labels, usersData, mrrData, costData, profitData };

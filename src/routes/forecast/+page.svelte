@@ -3,12 +3,15 @@
 
 	let months = $state(12);
 	let startingUsers = $state(100);
-	let growthRate = $state(8);
+	let growthRate = $state(10);
 	let churnRate = $state(3);
-	let revenuePerUser = $state(99);
-	let costPerUser = $state(15);
-	let fixedOverhead = $state(5000);
+	let revenuePerUser = $state(30);
+	let costPerUser = $state(20);
+	let fixedOverhead = $state(1500);
 	
+	let revenueBoostAfter6 = $state(false);
+	let dropGrowthAfter12 = $state(false);
+
 	$effect(() => {
       if (months < 12) months = 12;
       if (months > 36) months = 36;
@@ -28,7 +31,6 @@
     });
 </script>
 
-<!-- Filters Sidebar -->
 <div class="flex min-h-screen flex-row gap-4 bg-white p-4">
 	<aside class="w-64 space-y-4 rounded-xl bg-white p-4 shadow-md">
 		<h2 class="text-lg font-semibold text-slate-800">Filters</h2>
@@ -111,7 +113,7 @@
 						type="number"
 						bind:value={fixedOverhead}
 						min="0"
-						step="1"
+						step="100"
 						class="w-full rounded-md border px-3 py-2 focus:ring-2 focus:ring-indigo-500"
 					/>
 				</label>
@@ -121,14 +123,24 @@
 
 	<div class="flex flex-1 flex-col gap-4">
 		<div class="flex flex-wrap gap-4 rounded-xl bg-white p-4 shadow-md">
-			<div class="flex gap-4">Toggles</div>
+		
+		<label class="flex items-center gap-2">
+            <input type="checkbox" bind:checked={revenueBoostAfter6} />
+            <span>10% increase in revenue per user</span>
+        </label>
+        
+        <label class="flex items-center gap-2">
+          <input type="checkbox" bind:checked={dropGrowthAfter12} />
+          <span>50% drop in growth</span>
+        </label>
+        
 			<button class="ml-auto"> Export </button>
 		</div>
 
 		<div class="flex min-h-0 flex-1 flex-row gap-4">
 			<div class="flex min-h-0 flex-1 flex-col gap-4">
 				<div class="flex-1 rounded-xl bg-white p-4 shadow-md">
-					<Chart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead} />
+					<Chart {months} {startingUsers} {growthRate} {churnRate} {revenuePerUser} {costPerUser} {fixedOverhead} {revenueBoostAfter6} {dropGrowthAfter12}/>
 				</div>
 
 			</div>
