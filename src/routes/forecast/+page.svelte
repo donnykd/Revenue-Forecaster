@@ -1,6 +1,7 @@
 <script lang="ts">
     import Chart from '$lib/Chart.svelte'
     import { generateData } from '$lib/ChartCalc';
+	import { exportForecast } from '$lib/Export';
 
 	let months = $state(12);
 	let startingUsers = $state(100);
@@ -12,6 +13,20 @@
 	
 	let revenueIncrease = $state(false);
 	let growthDrop = $state(false);
+	
+	function handleExport(format: 'csv' | 'json'){
+	  exportForecast({
+			months,
+            startingUsers,
+            growthRate,
+            churnRate,
+            revenuePerUser,
+            costPerUser,
+            fixedOverhead,
+            revenueIncrease,
+            growthDrop
+		}, format)
+	}
 
 	$effect(() => {
       if (months < 12) months = 12;
@@ -135,7 +150,20 @@
           <span>50% drop in growth</span>
         </label>
         
-			<button class="ml-auto"> Export </button>
+        <div class="flex gap-2">
+            <button
+              onclick={() => handleExport('csv')}
+              class="rounded-md bg-purple-600 px-4 py-2 text-white shadow hover:bg-purple-700 transition"
+            >
+              Export CSV
+            </button>
+            <button
+              onclick={() => handleExport('json')}
+              class="rounded-md bg-purple-600 px-4 py-2 text-white shadow hover:bg-purple-700 transition"
+            >
+              Export JSON
+            </button>
+          </div>
 		</div>
 
 		<div class="flex min-h-0 flex-1 flex-row gap-4">
