@@ -14,11 +14,12 @@ test('Test correct data for 2 month', () => {
     growthDrop: false
   });
   
-  expect(result.usersData).toEqual([100, 105]) 
-  expect(result.labels).toEqual(['Month 1', 'Month 2']);
-  expect(result.mrrData).toEqual([5000, 5225]); 
-  expect(result.costData).toEqual([3000, 3090]);  
-  expect(result.profitData).toEqual([2000, 2135]); 
+  //3 array elements factoring in the starting data
+  expect(result.usersData).toEqual([100, 105, 109]) 
+  expect(result.labels).toEqual(['Month 0', 'Month 1', 'Month 2']);
+  expect(result.mrrData).toEqual([5000, 5225, 5460]); 
+  expect(result.costData).toEqual([3000, 3090, 3184]);  
+  expect(result.profitData).toEqual([2000, 2135, 2276]); 
   })
 
 test('Test 10% revenue increase', () => {
@@ -34,8 +35,8 @@ test('Test 10% revenue increase', () => {
     growthDrop: false
   });
   
-  expect(result.mrrData).toEqual([5500]);
-  expect(result.profitData).toEqual([2500]);
+  expect(result.mrrData).toEqual([5500, 5748]);
+  expect(result.profitData).toEqual([2500, 2658]);
 });
 
 test('Test 50% growth drop', () => {
@@ -51,7 +52,7 @@ test('Test 50% growth drop', () => {
     growthDrop: false
   });
   
-  expect(result.mrrData).toEqual([5500, 5748]);
-  expect(result.costData).toEqual([3000, 3090]); 
-  expect(result.profitData).toEqual([2500, 2658]);
+  expect(result.mrrData).toEqual([5500, 5748, 6006]);
+  expect(result.costData).toEqual([3000, 3090, 3184]); 
+  expect(result.profitData).toEqual([2500, 2658, 2822]);
 })
