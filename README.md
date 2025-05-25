@@ -1,38 +1,57 @@
-# sv
+# Revenue Forecaster
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+## Table of Contents
 
-## Creating a project
+- [About This Project](#about-this-project)
+- [Key Features](#key-features)
+- [Getting Started](#getting-started) 
+- [Running Tests](#running-tests)
+- [Technologies Used](#technologies-used)
 
-If you're seeing this, you've probably already done this step. Congrats!
+## About This Project
 
+A revenue forecasting tool built with SvelteKit that helps startup founders understand business growth by showcasing:
+- User growth projections  
+- Revenue/cost predictions
+- Profitability analysis
+
+## Key Features
+
+-  Interactive line chart showing users, revenue, costs and profits
+-  Data table with monthly breakdowns and totals  
+-  Real-time calculations
+-  Scenario toggles for revenue boosts and growth drops
+-  Export data into CSV/JSON files
+
+## Getting Started
+
+### Prerequisites  
+- Node.js
+- pnpm package manager
+
+### Installation
 ```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+git clone https://github.com/donnykd/Revenue-Forecaster.git
+cd financial-forecast
+pnpm install
+pnpm run dev --open
 ```
 
-## Developing
+## Running Tests
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+To run the test suite, execute the following command:
 
 ```bash
-npm run build
+pnpm test
 ```
 
-You can preview the production build with `npm run preview`.
+## Technologies Used
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### Core Stack
+- SvelteKit
+- TypeScript
+- Chart.js
+
+### Development Tools
+- pnpm (Package Manager)
+- Vitest (Unit Testing)
